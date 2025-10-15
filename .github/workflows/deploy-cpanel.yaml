@@ -22,7 +22,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_HOST }}          
-          username: ${{ secrets.FTP_USERNAME }}   
+          username: ${{ secrets.FTP_USERNAME }}    
           password: ${{ secrets.FTP_PASSWORD }}    # ton mot de passe
           protocol: ftps                           # FTPS explicite
           port: 21                                 # Port FTP standard
@@ -32,8 +32,7 @@ jobs:
           server-dir: /sites/safecongo.jobmakombela.fr/
           exclude: |
             **/.git*
+            **/node_modules/*
             **/*.map
             **/*:Zone.Identifier
           dry-run: false
-          timeout: 300000
-          concurrency: 2

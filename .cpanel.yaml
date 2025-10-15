@@ -5,5 +5,4 @@ deployment:
   exclude:
     - .git
     - /mysql
-    - /php
     - .idea
