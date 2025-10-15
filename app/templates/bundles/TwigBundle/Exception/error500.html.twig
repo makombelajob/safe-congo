@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ page_title ?: 'Erreur 500' }}
+{% endblock %}
+
+{% block body %}
+	<section class="d-flex flex-column justify-content-center align-items-center vh-100 text-center bg-light">
+		<h1 class="display-1 text-danger mb-3">500</h1>
+		<h2 class="h3 mb-3">Oups ! Une erreur interne est survenue</h2>
+		<p class="mb-4">
+			Il semble y avoir un problème sur le serveur. Nos équipes ont été alertées et travaillent pour le résoudre.
+		</p>
+		<a href="{{ path('homepage') }}" class="btn btn-primary btn-lg">
+			Retour à l'accueil
+		</a>
+	</section>
+{% endblock %}
+
