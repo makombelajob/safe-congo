@@ -29,7 +29,7 @@ jobs:
           secure: true
           ftp-passive: true
           local-dir: ./app/                        # chemin relatif dans le repo
-          server-dir: /sites/safecongo.jobmakombela.fr/
+          server-dir: /sites/safecongo.ent-facile.fr/
           exclude: |
             **/.git*
             **/node_modules/*
