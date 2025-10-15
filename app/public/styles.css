@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+:root{--sc-primary:#0d6efd;--sc-accent:#198754}
+body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.navbar-brand{letter-spacing:.3px}
+.hero{background:linear-gradient(180deg,rgba(13,110,253,.08),rgba(25,135,84,.08));border-radius:.75rem}
+#map{height:60vh;min-height:420px;border-radius:.5rem;border:1px solid rgba(0,0,0,.075)}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carte des incidents – SafeCongo{% endblock %}
+
+{% block body %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h1 class="h3 m-0">Carte des incidents</h1>
+  <a class="btn btn-primary" href="{{ path('app_incident_report') }}">Nouveau signalement</a>
+  
+</div>
+<div id="map" class="shadow-sm"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+  var map = window.SafeCongo && window.SafeCongo.initMap('map', { center: [ -2.8797, 23.6560 ], zoom: 5 });
+  if (!map) return;
+  try {
+    const res = await fetch('{{ path('api_incidents') }}');
+    const data = await res.json();
+    data.forEach(function (i) {
+      var marker = L.marker([i.latitude, i.longitude]).addTo(map);
+      var html = '<strong>' + (i.title||'Incident') + '</strong><br>' + (i.description||'');
+      if (i.photoPath) { html += '<br><img src="' + i.photoPath + '" alt="photo" style="max-width:160px;border-radius:6px;margin-top:4px">'; }
+      marker.bindPopup(html);
+    });
+  } catch (e) { console.error(e); }
+});
+</script>
+{% endblock %}
+
+

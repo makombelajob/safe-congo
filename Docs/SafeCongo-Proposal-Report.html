@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeCongo – Rapport de projet</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{font-size:14px}
+    h1,h2,h3{page-break-after: avoid}
+    .cover{padding:64px 0;border-bottom:1px solid #e9ecef}
+    .muted{color:#6c757d}
+    .logo{font-weight:700;color:#0d6efd}
+    .badge-kpi{font-size:12px}
+    .code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace}
+  </style>
+  </head>
+<body>
+  <div class="container my-4">
+    <section class="cover">
+      <h1 class="mb-1">SafeCongo – Plateforme d’alerte communautaire</h1>
+      <div class="muted">Rapport de projet et proposition d’évolution (version avec authentification)</div>
+      <div class="mt-3"><span class="logo">SafeCongo</span> – 15/10/2025</div>
+      <div class="mt-3">
+        <strong>Accès en ligne&nbsp;:</strong>
+        <a href="http://safecongo.jobmakombela.fr/" target="_blank" rel="noopener">http://safecongo.jobmakombela.fr/</a>
+      </div>
+    </section>
+
+    <section class="mt-4">
+      <h2>1. Résumé exécutif</h2>
+      <p>SafeCongo offre aux citoyens congolais un moyen simple et sécurisé pour signaler les incidents (texte, photo, géolocalisation), visualiser les alertes sur une carte interactive et informer rapidement les autorités. Le présent livrable couvre une version fonctionnelle web (Symfony 7) déployable avec Docker, intégrant un front Twig + Bootstrap et une carte Leaflet.</p>
+    </section>
+
+    <section class="mt-4">
+      <h2>2. Périmètre implanté</h2>
+      <ul>
+        <li>Accueil, carte interactive, formulaire de signalement.</li>
+        <li>Entité <span class="code">Incident</span> (titre, type, description, latitude, longitude, photo, date).</li>
+        <li>Upload de photos côté serveur dans <span class="code">public/uploads</span>.</li>
+        <li>API simple JSON: <span class="code">GET /api/incidents</span> (liste pour affichage sur la carte).</li>
+        <li>Intégration Bootstrap 5, Bootstrap Icons et Leaflet (CDN).</li>
+        <li>Footer professionnel multi-colonnes et menu mobile offcanvas.</li>
+        <li>Docker: services PHP/Apache, MySQL, phpMyAdmin, Mailhog.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>3. Architecture technique</h2>
+      <ul>
+        <li><strong>Backend</strong>: Symfony 7 (Twig, Doctrine ORM, Validator, Mailer, Notifier, Messenger prêt à l’emploi).</li>
+        <li><strong>Base de données</strong>: MySQL 8 (Docker service <span class="code">database</span>).</li>
+        <li><strong>Frontend</strong>: Twig + Bootstrap 5; carte Leaflet avec tuiles OpenStreetMap.</li>
+        <li><strong>Déploiement</strong>: Docker Compose. Volumes persistants pour la base de données.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>4. Sécurité & conformité</h2>
+      <ul>
+        <li>Validation serveur via Symfony Validator (extensible sur les entités et formulaires).</li>
+        <li>Protection CSRF incluse pour formulaires Twig (activation facile via composants Form/Twig).</li>
+        <li>Bonnes pratiques XSS : échappement Twig par défaut, chargement de ressources de confiance (CDN avec SRI quand possible).</li>
+        <li>Sauvegardes et monitoring prévus via l’infrastructure Docker/Cloud.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>5. Fonctionnement principal</h2>
+      <ol>
+        <li><strong>Signalement</strong> : l’usager remplit un formulaire avec titre, type, description, position (clic carte) et photo.</li>
+        <li><strong>Persistance</strong> : l’incident est enregistré en base. La photo est stockée dans <span class="code">public/uploads</span>.</li>
+        <li><strong>Carte</strong> : la page /map charge <span class="code">/api/incidents</span> et affiche des marqueurs.</li>
+        <li><strong>Mobile</strong> : menu offcanvas pour éviter le décalage de page lors de l’ouverture.</li>
+      </ol>
+    </section>
+
+    <section class="mt-4">
+      <h2>6. Éléments livrés</h2>
+      <ul>
+        <li>Code Symfony: entités, contrôleurs, templates Twig.</li>
+        <li>Styles personnalisés : <span class="code">public/styles.scss</span> (compilé en <span class="code">public/styles.css</span>).</li>
+        <li>Scripts front : <span class="code">public/script.js</span> (helpers Leaflet).</li>
+        <li>Docker Compose: services PHP/Apache, MySQL, phpMyAdmin, Mailhog.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>7. Proposition d’évolution – Version avec authentification</h2>
+      <p>Pour une mise en production gouvernementale, nous recommandons une version avec authentification et rôles :</p>
+      <ul>
+        <li><strong>Authentification JWT</strong> (LexikJWTAuthenticationBundle) pour clients web et mobiles.</li>
+        <li><strong>Rôles</strong> : citoyen (création de signalements), modérateur/autorité (validation, assignation), admin (gouvernance, configuration).</li>
+        <li><strong>API Platform</strong> (REST/GraphQL) exposant entités et opérations custom (validation, assignation, géo‑filtres).</li>
+        <li><strong>Notifications asynchrones</strong> : Messenger + transport (ex. RabbitMQ) pour emails/SMS/Push.</li>
+        <li><strong>Gestion des médias</strong> : VichUploaderBundle pour photos avec validations (taille, type) et dérivés.</li>
+        <li><strong>Tableau de bord</strong> : statistiques, filtres par type/région/date, export PDF/CSV.</li>
+        <li><strong>Sécurité</strong> : durcissement headers, contrôle d’accès par attributs/voters, audit logs.</li>
+        <li><strong>Accessibilité & i18n</strong> : Français + langues locales.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>8. Planning indicatif (version avec authentification)</h2>
+      <table class="table table-sm">
+        <thead><tr><th>Étape</th><th>Durée</th><th>Livrables</th></tr></thead>
+        <tbody>
+          <tr><td>Conception détaillée</td><td>1–2 sem.</td><td>Spécifications, modèles de données</td></tr>
+          <tr><td>Backend sécurisé</td><td>3–4 sem.</td><td>JWT, rôles, API Platform, Messenger</td></tr>
+          <tr><td>Dashboards & carte</td><td>2–3 sem.</td><td>UI modération/admin, filtres, exports</td></tr>
+          <tr><td>Tests & sécurité</td><td>1–2 sem.</td><td>Tests, pentest, durcissement</td></tr>
+          <tr><td>Déploiement</td><td>1 sem.</td><td>CI/CD, monitoring, backups</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mt-4">
+      <h2>9. Prérequis & exploitation</h2>
+      <ul>
+        <li>Infra Docker (ou hébergement Cloud) avec MySQL/PostgreSQL managé.</li>
+        <li>Gestion des secrets (JWT, SMTP, SMS gateway) via variables d’environnement.</li>
+        <li>Surveillance (logs, métriques) et sauvegardes régulières.</li>
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <h2>10. Annexes</h2>
+      <ul>
+        <li>Endpoints majeurs : <span class="code">/</span>, <span class="code">/report</span>, <span class="code">/map</span>, <span class="code">/api/incidents</span>.</li>
+        <li>Dossiers clés : <span class="code">app/src</span>, <span class="code">app/templates</span>, <span class="code">app/public</span>, <span class="code">Docs</span>.</li>
+      </ul>
+    </section>
+
+    <hr class="my-5"/>
+    <p class="text-muted small">Ce document est confidentiel et destiné au client. © SafeCongo.</p>
+  </div>
+</body>
+</html>
+

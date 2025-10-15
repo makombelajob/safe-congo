@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signaler un incident – SafeCongo{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 mb-4">Signaler un incident</h1>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" action="#" enctype="multipart/form-data">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Titre</label>
+              <input type="text" class="form-control" name="title" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Type</label>
+              <select class="form-select" name="type" required>
+                <option value="violence">Violence</option>
+                <option value="catastrophe">Catastrophe naturelle</option>
+                <option value="sante">Santé</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="4" name="description" required></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Latitude</label>
+              <input type="text" class="form-control" name="latitude" id="lat" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Longitude</label>
+              <input type="text" class="form-control" name="longitude" id="lng" required>
+            </div>
+            <div class="col-12">
+              <div id="map" class="mb-3"></div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Photo (optionnel)</label>
+              <input type="file" class="form-control" name="photo" accept="image/*">
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <a class="btn btn-outline-secondary" href="{{ path('app_home') }}">Annuler</a>
+            <button class="btn btn-primary" type="submit">Envoyer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var map = window.SafeCongo && window.SafeCongo.initMap('map', { center: [ -4.322447, 15.307045 ], zoom: 12 });
+  if (!map) return;
+  var marker;
+  function updateLatLng(latlng){
+    document.getElementById('lat').value = latlng.lat.toFixed(6);
+    document.getElementById('lng').value = latlng.lng.toFixed(6);
+  }
+  map.on('click', function (e) {
+    if (marker) { marker.setLatLng(e.latlng); }
+    else { marker = L.marker(e.latlng, { draggable: true }).addTo(map); }
+    updateLatLng(e.latlng);
+    marker.on('dragend', function(){ updateLatLng(marker.getLatLng()); });
+  });
+});
+</script>
+{% endblock %}
+
+
