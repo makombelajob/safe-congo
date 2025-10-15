@@ -36,3 +36,5 @@ jobs:
             **/*.map
             **/*:Zone.Identifier
           dry-run: false
+          timeout: 30000
+          concurrency: 2
