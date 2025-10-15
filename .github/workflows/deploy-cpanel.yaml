@@ -32,9 +32,8 @@ jobs:
           server-dir: /sites/safecongo.jobmakombela.fr/
           exclude: |
             **/.git*
-            **/node_modules/*
             **/*.map
             **/*:Zone.Identifier
           dry-run: false
-          timeout: 30000
+          timeout: 300000
           concurrency: 2
